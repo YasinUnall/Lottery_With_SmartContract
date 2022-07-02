@@ -45,7 +45,11 @@ def test_can_end_lottery():
     account = get_account()
     lottery.startLottery({"from": account})
     lottery.enter({"from": account, "value": lottery.getEntranceFee()})
-    fund_with_link(lottery.address)
-    lottery.endLottery({"from": account})
+
+    fund_tx = fund_with_link(lottery.address)
+    fund_tx.wait(1)
+
+    end_tx = lottery.endLottery({"from": account})
+    end_tx.wait(1)
 
     assert lottery.lottery_state() == 2
